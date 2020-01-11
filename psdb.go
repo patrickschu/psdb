@@ -53,3 +53,4 @@ func search(filename string, index string) (result string, err error) {
 
 //DB needs to 1) add 2) delete 3) look up
 //DB should work via CL psdb FROM $NAME GET $INDEX
+//DB needs conditionals psdb FROM $NAME GET * WHERE $CONDITION
