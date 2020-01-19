@@ -1,4 +1,4 @@
-package psdb
+package main
 
 import (
 	"encoding/json"
@@ -12,6 +12,18 @@ import (
 // 		t.Errorf("Abs(-1) = %d; want 1", got)
 // 	}
 // }
+
+func Test_DBactions(t *testing.T) {
+	db := DataBase{logfile: "actionstest.txt"}
+	db.ADD("name=actiontestrec value=actiontestval", "1")
+	querystring := "value=actiontestval"
+	res, err := db.SELECT(querystring)
+	if err != nil {
+		t.Fatalf("no value returned for %s, returned %v", querystring, err)
+	}
+	fmt.Println("DBactions", res)
+	db.DELETE()
+}
 
 func Test_checkvalue(t *testing.T) {
 
