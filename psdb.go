@@ -1,4 +1,4 @@
-package psdb
+package main
 
 import (
 	"bufio"
@@ -55,7 +55,13 @@ func (db *DataBase) SELECT(query string) (matches []string, err error) {
 			results = append(results, matches...)
 		}
 	}
-	return matches, nil
+	return results, nil
+}
+
+func (db *DataBase) DELETE() error {
+	// delete the logfile
+	err := os.Remove(db.logfile)
+	return err
 }
 
 func checkvalue(kvpair []string, line string) (match string, err error) {
@@ -86,10 +92,12 @@ func searchvalue(filename string, kvpair []string) (results []string, err error)
 	for scan.Scan() {
 		res, err := checkvalue(kvpair, scan.Text())
 		if err == nil {
+			//fmt.Printf("\nsearchvalue found %s\n", res)
 			matches = append(matches, res)
 		}
 	}
-	return matches, fmt.Errorf("Condition %s not matched", kvpair)
+	return matches, nil
+	//return matches, fmt.Errorf("Condition %s not matched", kvpair)
 }
 
 // CREATE testdb
@@ -103,6 +111,7 @@ func dbappend(filename string, record string) error {
 		return fmt.Errorf("Cannot open file %s", filename)
 	}
 	_, writeerr := fil.Write([]byte(record + "\n"))
+	fmt.Printf("Written %s to %s\n", record, filename)
 	if writeerr != nil {
 		return fmt.Errorf("Cannot write to file %s", filename)
 	}
